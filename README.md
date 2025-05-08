@@ -1,27 +1,6 @@
 # Console‑Commerce 🛒💻
 
 A simple console‑based e‑commerce application written in C++ with MySQL integration, featuring user authentication and role‑based shopping (buyer/seller). 🔐🛍️
-
-## 📋 Table of Contents
-
-1. [Overview](#overview)  
-2. [Features](#features)  
-3. [Prerequisites](#prerequisites)  
-4. [Installation](#installation)  
-5. [Usage](#usage)  
-   - [Running the App](#running-the-app)  
-   - [User Flow](#user-flow)  
-     - [Sign Up / Login / Logout](#sign-up--login--logout)  
-     - [Choose Role: Buyer or Seller](#choose-role-buyer-or-seller)  
-     - [Buyer Actions](#buyer-actions)  
-     - [Seller Actions](#seller-actions)  
-6. [Project Structure](#project-structure)  
-7. [Extending & Contributing](#extending--contributing)  
-8. [License](#license)  
-9. [Contact](#contact)  
-
----
-
 ## 🧐 Overview
 
 **Console‑Commerce** is a terminal‑based application that simulates a simple e‑commerce platform. Users can register, log in, choose to operate as a buyer or a seller, and then perform actions appropriate to their role—all through a text menu interface. 🎛️
