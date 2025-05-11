@@ -34,6 +34,8 @@
 ```bash
 git clone https://github.com/your-username/quickbuy.git
 cd quickbuy
+
+````
 ````
 
 ### 2. 🛠️ Compile
@@ -81,7 +83,3 @@ Run the SQL script located in:
 
 MIT License — see `LICENSE` file.
 
-```
-
-
-```
