@@ -1,9 +1,8 @@
-``
+
 # 🛍️ QuickBuy Marketplace (C++ + MySQL)
 
 **QuickBuy** is a terminal-based marketplace system built in **C++17** using **MySQL**. It allows buyers and sellers to interact, manage products, and handle checkout operations — all in the command line.
 ```
----
 ````
 ## 🚀 Features
 
