@@ -70,7 +70,7 @@ g++ -std=c++17 quickbuy.cpp -o quickbuy -lmysqlcppconn
 ```bash
 ./quickbuy
 ```
-
+```
 ---
 
 ## 📌 TODO / Future Ideas
