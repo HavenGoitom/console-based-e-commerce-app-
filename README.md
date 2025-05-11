@@ -1,44 +1,36 @@
 ````markdown
 # 🛍️ QuickBuy Marketplace (C++ + MySQL)
 
-Welcome to **QuickBuy**, a terminal-based e-commerce marketplace built with **C++** and **MySQL**! This project simulates a simple multi-user system where buyers and sellers can interact — from managing products to purchasing with checkout and cart support.
+**QuickBuy** is a terminal-based marketplace system built in **C++17** using **MySQL**. It allows buyers and sellers to interact, manage products, and handle checkout operations — all in the command line.
 
 ---
 
 ## 🚀 Features
 
-- 👥 **User System**
-  - Separate login/sign-up for `buyers` and `sellers`
-  - Profile editing with password and account updates
-
-- 🛒 **Buyers**
-  - Browse all products with formatted output
-  - Add products to cart, view cart contents
-  - Proceed to checkout with stock update
-  - View seller’s **CBE** and **Telebirr** account for payment
-
-- 🧑‍💼 **Sellers**
-  - Add, view, update, and delete their own products
-  - Manage inventory
-  - Edit profile, including payment accounts
-
-- 💾 **MySQL Database Integration**
-  - All data is persistent using `MySQL Connector/C++`
-  - Uses parameterized queries to prevent SQL injection
+- 👤 Sign up / log in as **buyer** or **seller**
+- 🛍️ Buyers can:
+  - Browse and search products
+  - Add to cart and checkout
+  - View seller’s CBE / Telebirr accounts
+- 🧑‍💼 Sellers can:
+  - Add, update, delete products
+  - Edit their profile & payment info
+- 💽 All data is stored in **MySQL**, using safe prepared statements
 
 ---
 
 ## ⚙️ Tech Stack
 
-- 🧠 Language: **C++**
-- 🗄️ Database: **MySQL**
-- 🔌 Connector: `mysql/jdbc.h` (MySQL Connector/C++)
+- 💻 C++17
+- 🗄️ MySQL
+- 🔌 MySQL Connector/C++
 
 ---
 
-## 📦 Setup Instructions
+## 🧰 Setup Instructions
 
-### 1. 📥 Clone the Repository
+### 1. 📦 Clone the repo
+
 ```bash
 git clone https://github.com/your-username/quickbuy.git
 cd quickbuy
@@ -50,38 +42,46 @@ cd quickbuy
 g++ -std=c++17 quickbuy.cpp -o quickbuy -lmysqlcppconn
 ```
 
-> Make sure `libmysqlcppconn` is installed. On Ubuntu:
->
-> ```bash
-> sudo apt install libmysqlcppconn-dev
-> ```
+### 3. 🧱 Setup MySQL
 
-### 3. 🧱 Set Up the Database
+Run the SQL script located in:
 
-* Open **MySQL CLI** or any SQL client (e.g. phpMyAdmin)
-* Paste and execute the schema from `schema.sql` or:
-
-```sql
--- Provided in the /docs or see README.md below
+```
+/database/quickbuy.sql
 ```
 
-### 4. 🚀 Run
+### 4. 🚀 Run the app
 
 ```bash
 ./quickbuy
 ```
-```
+
 ---
 
-## 📌 TODO / Future Ideas
+## 📂 Project Structure
 
-* 🧾 Add order history tracking
-* 🔎 Add product search & filter
-* 📦 Save cart across sessions
-* 📤 Upload product images (via future web version)
+| File / Folder  | Description          |
+| -------------- | -------------------- |
+| `quickbuy.cpp` | Main C++ source file |
+| `database/`    | SQL schema setup     |
+| `README.md`    | This file            |
+
+---
+
+## 📌 Roadmap
+
+* 🧾 Order history
+* 🔍 Product search
+* 🛒 Persistent carts
+* 🖼️ Image upload (future UI)
 
 ---
 
 ## 📜 License
 
-This project is licensed under the [MIT License](LICENSE).
+MIT License — see `LICENSE` file.
+
+```
+
+
+```
