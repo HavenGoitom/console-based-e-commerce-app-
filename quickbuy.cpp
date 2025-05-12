@@ -22,7 +22,7 @@ string subcategories[5][3] = {
     {"Skincare", "Makeup", "Haircare"},
     {"Fruits", "Snacks", "Beverages"}
 };
-\
+
 int getInt() {
     int x;
     while (!(cin >> x)) {
@@ -131,7 +131,8 @@ void editProfile(int userId) {
     getType->setInt(1, userId);
     sql::ResultSet* rs = getType->executeQuery();
     string type;
-    if (rs->next()) type = rs->getString("user_type");
+    if (rs->next()) 
+        type = rs->getString("user_type");
     delete rs; delete getType;
 
     if (type == "seller") {
@@ -306,7 +307,7 @@ void addToCart(int buyerId) {
 
 void viewCart(int buyerId) {
     sql::PreparedStatement* stmt = conn->prepareStatement(
-        "SELECT ci.product_id, p.name, p.price, ci.quantity, p.stock, u.full_name, u.cbe_account, u.telebirr_account "
+        "SELECT ci.product_id, p.name, p.price, ci.quantity, p.stock, p.seller_id, u.full_name, u.cbe_account, u.telebirr_account "
         "FROM cart_items ci "
         "JOIN products p ON ci.product_id = p.product_id "
         "JOIN users u ON p.seller_id = u.user_id "
@@ -317,63 +318,91 @@ void viewCart(int buyerId) {
 
     double total = 0;
     struct CartItem {
-        int product_id, quantity, stock;
+        int product_id, quantity, stock, seller_id;
+        double price;
     };
-    vector<CartItem> cart;
+
+    CartItem cart[50];  // fixed-size array
+    int cartSize = 0;
 
     int i = 1;
     cout << "\n===== Your Cart =====\n";
-    while (rs->next()) {
+    while (rs->next() && cartSize < 50) {
         string name = rs->getString("name");
-        double price = rs->getDouble("price");
+        double price = rs->getDouble("price") * 1.15;  // Apply 15% markup
         int qty = rs->getInt("quantity");
+        int stock = rs->getInt("stock");
+
         double itemTotal = price * qty;
         total += itemTotal;
 
-        int product_id = rs->getInt("product_id");
-        int stock = rs->getInt("stock");
-        cart.push_back({ product_id, qty, stock });
+        cart[cartSize++] = {
+            rs->getInt("product_id"),
+            qty,
+            stock,
+            rs->getInt("seller_id"),
+            price
+        };
 
-        cout << i++ << ". " << name << " x" << qty << " = " << itemTotal << " birr\n";
+        cout << i++ << ". " << name << " x" << qty << " = " << fixed << setprecision(2)
+            << itemTotal << " birr (incl. 15%)\n";
         cout << "   Seller: " << rs->getString("full_name") << "\n";
         cout << "   CBE Account: " << rs->getString("cbe_account") << "\n";
         cout << "   Telebirr Account: " << rs->getString("telebirr_account") << "\n\n";
     }
 
-    if (cart.empty()) {
+    delete rs;
+    delete stmt;
+
+    if (cartSize == 0) {
         cout << "Your cart is empty.\n";
-        delete rs; delete stmt;
         return;
     }
 
-    cout << "Total: " << total << " birr\n";
-    cout << "Proceed to checkout? (1 = Yes, 0 = No): ";
-    int choice = getInt();
+    cout << "Total: " << fixed << setprecision(2) << total << " birr\n";
+    cout << "Enter payment method (CBE, Telebirr, etc.): ";
+    string paymentMethod = getLine();
 
-    if (choice == 1) {
-        for (auto& item : cart) {
+    cout << "Proceed to checkout? (1 = Yes, 0 = No): ";
+    int confirm = getInt();
+
+    if (confirm == 1) {
+        for (int i = 0; i < cartSize; ++i) {
+            CartItem& item = cart[i];
+
+            // 1. Deduct stock
             sql::PreparedStatement* updateStock = conn->prepareStatement(
                 "UPDATE products SET stock = ? WHERE product_id = ?");
             updateStock->setInt(1, item.stock - item.quantity);
             updateStock->setInt(2, item.product_id);
             updateStock->execute();
             delete updateStock;
+
+            // 2. Insert into orders table
+            sql::PreparedStatement* insertOrder = conn->prepareStatement(
+                "INSERT INTO orders (buyer_id, product_id, seller_id, quantity, payment_method, paid) "
+                "VALUES (?, ?, ?, ?, ?, TRUE)");
+            insertOrder->setInt(1, buyerId);
+            insertOrder->setInt(2, item.product_id);
+            insertOrder->setInt(3, item.seller_id);
+            insertOrder->setInt(4, item.quantity);
+            insertOrder->setString(5, paymentMethod);
+            insertOrder->execute();
+            delete insertOrder;
         }
 
-        sql::PreparedStatement* del = conn->prepareStatement("DELETE FROM cart_items WHERE buyer_id = ?");
-        del->setInt(1, buyerId);
-        del->execute();
-        delete del;
+        // 3. Clear cart
+        sql::PreparedStatement* clearCart = conn->prepareStatement(
+            "DELETE FROM cart_items WHERE buyer_id = ?");
+        clearCart->setInt(1, buyerId);
+        clearCart->execute();
+        delete clearCart;
 
-        cout << "Checkout complete. Thank you!\n";
+        cout << "Checkout complete. Your order has been placed.\n";
     }
-
-    delete rs;
-    delete stmt;
 }
 
 
-// ==== MENUS ====
 void sellerMenu(int sellerId) {
     int ch;
     do {
