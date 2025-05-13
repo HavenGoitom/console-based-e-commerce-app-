@@ -80,7 +80,19 @@ Run the SQL script located in:
 * 🛒 Persistent carts
 * 🖼️ Image upload (future UI)
 
----
+
+
+# Team Members
+
+| Name                | ID         |
+| ------------------- | ---------- |
+| Gelila Melaku       | ETS0618/16 |
+| Haleluya Gashawtena | ETS0646/16 |
+| Halwa Mohammed      | ETS0647/16 |
+| Hana Gadissa        | ETS0653/16 |
+| Haven Goitom        | ETS0667/16 |
+| Hiwot Anmut         | ETS0721/16 |
+
 
 ## 📜 License
 
